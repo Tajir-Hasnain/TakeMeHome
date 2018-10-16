@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".StudentActivity">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center">
+        <TextView
+            android:id="@+id/countTempoo"
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="X tempos are available in pahartoli"
+            android:textSize="20dp"/>
+
+        <Button
+            android:layout_gravity="center"
+            android:id="@+id/stdrequest"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="Request a Tempoo"
+            android:onClick="requestClick"
+            />
+        <Button
+            android:layout_gravity="center"
+            android:layout_marginTop="20dp"
+            android:id="@+id/stdcancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Cancel Request"
+            android:onClick="cancelClick"/>
+    </LinearLayout>
+</android.support.constraint.ConstraintLayout>
