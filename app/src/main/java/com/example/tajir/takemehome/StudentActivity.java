@@ -59,6 +59,8 @@ public class StudentActivity extends AppCompatActivity {
     private LocationSettingsRequest mLocationSettingsRequest;
     private LocationCallback mLocationCallback;
     private Location mCurrentLocation;
+    public Double cuet_longitude , cuet_latitude;
+    public Double MAX_DISTANCE = 2.0;
 
     // boolean flag to toggle the ui
     private Boolean mRequestingLocationUpdates;
@@ -91,12 +93,12 @@ public class StudentActivity extends AppCompatActivity {
                 latitude = mCurrentLocation.getLatitude();
 
                 if(!inRadius()) {
+                    Log.d("Location", "Longitude = " + longitude.toString() + ", Latitude = " + latitude.toString());
                     Log.d("Status","Not in the active region");
                     mRequestingLocationUpdates = false;
                     stopLocationUpdates();
                 }
 
-                Log.d("Location", "Longitude = " + longitude.toString() + ", Latitude = " + latitude.toString());
                 Toast.makeText(StudentActivity.this, "{" + longitude.toString() + "," + latitude.toString() + "}", Toast.LENGTH_SHORT).show();
 
             }
@@ -248,7 +250,27 @@ public class StudentActivity extends AppCompatActivity {
         }
     }
 
+    public Double deg2rad(Double deg) {
+        return deg * (Math.PI / 180);
+    }
+
     boolean inRadius() {
+        cuet_latitude = 22.462083;
+        cuet_longitude = 91.972944;
+
+        Double R = 6371.0;
+        Double dLat = deg2rad(cuet_latitude - latitude);
+        Double dLon = deg2rad(cuet_longitude - longitude);
+        Double a,dist,c;
+        a = Math.sin(dLat/2) * Math.sin(dLat/2)
+                + Math.cos(deg2rad(latitude)) * Math.cos(deg2rad(cuet_latitude))
+                * Math.sin(dLon/2) * Math.sin(dLon/2);
+        c = 2 * Math.atan2(Math.sqrt(a) , Math.sqrt(1-a));
+        dist = R * c;
+        Log.d("Distance from CUET", dist.toString()+" km");
+        if(dist > MAX_DISTANCE)
+            return false;
+
         return true;
     }
 }
