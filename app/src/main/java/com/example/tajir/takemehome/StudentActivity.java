@@ -61,6 +61,7 @@ public class StudentActivity extends AppCompatActivity {
     private Location mCurrentLocation;
     public Double cuet_longitude , cuet_latitude;
     public Double MAX_DISTANCE = 2.0;
+    public Integer count = 0;
 
     // boolean flag to toggle the ui
     private Boolean mRequestingLocationUpdates;
@@ -94,9 +95,13 @@ public class StudentActivity extends AppCompatActivity {
 
                 if(!inRadius()) {
                     Log.d("Location", "Longitude = " + longitude.toString() + ", Latitude = " + latitude.toString());
-                    Log.d("Status","Not in the active region");
+                    Log.d("Status","Not in the active region"+" "+count.toString());
                     mRequestingLocationUpdates = false;
-                    stopLocationUpdates();
+                    if(count == 60) {
+                        stopLocationUpdates();
+                        count = 0;
+                    }
+                    count++;
                 }
 
                 Toast.makeText(StudentActivity.this, "{" + longitude.toString() + "," + latitude.toString() + "}", Toast.LENGTH_SHORT).show();
@@ -255,8 +260,8 @@ public class StudentActivity extends AppCompatActivity {
     }
 
     boolean inRadius() {
-        cuet_latitude = 22.462083;
-        cuet_longitude = 91.972944;
+        cuet_latitude = 22.459892;
+        cuet_longitude = 91.970996;
 
         Double R = 6371.0;
         Double dLat = deg2rad(cuet_latitude - latitude);
