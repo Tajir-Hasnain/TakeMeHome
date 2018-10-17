@@ -22,6 +22,12 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.ResolvableApiException;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -44,6 +50,9 @@ import com.karumi.dexter.listener.PermissionGrantedResponse;
 import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.single.PermissionListener;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.text.DateFormat;
 import java.util.Date;
 import java.util.logging.Handler;
@@ -51,7 +60,7 @@ import java.util.logging.Handler;
 public class StudentActivity extends AppCompatActivity {
 
     public Double longitude,latitude;
-    public Integer carCount = 0;
+    public String carCount = "0";
     public boolean requesting = false;
     private FusedLocationProviderClient mFusedLocationClient;
     private SettingsClient mSettingsClient;
@@ -74,7 +83,6 @@ public class StudentActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_student);
 
-        new getDriverCount().execute();
         init();
 
     }
@@ -84,6 +92,8 @@ public class StudentActivity extends AppCompatActivity {
         Intent intent = getIntent();
         id = intent.getStringExtra("id");
         Log.d("ID",id);
+
+        updateUI();
 
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
         mSettingsClient = LocationServices.getSettingsClient(this);
@@ -216,6 +226,7 @@ public class StudentActivity extends AppCompatActivity {
                     @Override
                     public void onPermissionRationaleShouldBeShown(PermissionRequest permission, PermissionToken token) {
                         token.continuePermissionRequest();
+                        requestLocationUpdates();
                     }
                 }).check();
     }
@@ -231,34 +242,6 @@ public class StudentActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    private class getDriverCount extends AsyncTask<Void,Void,Void> {
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            Log.d("Status", "Sending JSON request");
-        }
-
-        @Override
-        protected Void doInBackground(Void... voids) {
-            Log.d("Status", "Parsing JSON object");
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
-            Log.d("Status","Tempoo Count = "+carCount);
-            TextView tv = (TextView) findViewById(R.id.countTempoo);
-
-            String s;
-            s = (carCount == 0) ? "No" : carCount.toString();
-            if(carCount == 0 || carCount == 1)
-                s += " tempoo is available in pahartoli";
-            else
-                s += " tempoos are available in pahartoli";
-            tv.setText(s);
-        }
-    }
 
     public Double deg2rad(Double deg) {
         return deg * (Math.PI / 180);
@@ -282,6 +265,55 @@ public class StudentActivity extends AppCompatActivity {
             return false;
 
         return true;
+    }
+
+    public void updateUI() {
+
+        //JSON
+        RequestQueue queue = Volley.newRequestQueue(this);
+        final TextView tv = findViewById(R.id.countTempoo);
+
+        String url = "http://6105b92d.ngrok.io/studentnumrequest";
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
+                Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    carCount = response.getString("count");
+
+                    String s;
+
+                    s = (carCount.equals("0")) ? "No" : carCount.toString();
+
+                    if(carCount.equals("0") || carCount.equals("1") )
+                        s += " tempoo is available in pahartoli";
+                    else
+                        s += " tempoos are available in pahartoli";
+
+                    tv.setText(s);
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.v("Status","Json request failed");
+
+                String s;
+
+                s = (carCount.equals("0")) ? "No" : carCount.toString();
+
+                if(carCount.equals("0") || carCount.equals("1") )
+                    s += " tempoo is available in pahartoli";
+                else
+                    s += " tempoos are available in pahartoli";
+
+                tv.setText(s);
+            }
+        });
+        queue.add(jsonObjectRequest);
     }
 
     @Override
