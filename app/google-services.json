@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "929751447309",
+    "firebase_url": "https://takemehome-4e4e9.firebaseio.com",
+    "project_id": "takemehome-4e4e9",
+    "storage_bucket": "takemehome-4e4e9.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:929751447309:android:6a7dbd76f3ca18c7",
+        "android_client_info": {
+          "package_name": "com.example.tajir.takemehome"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "929751447309-spd9obafltg7d61jmqcit2k8p176ohdv.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.tajir.takemehome",
+            "certificate_hash": "c16b6e8112849c854f51806458d58eb5dacb3697"
+          }
+        },
+        {
+          "client_id": "929751447309-99r6uqq2bkts1lailqqrjcd37ml89i3f.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyASb4A90JStBML5nTfAZxWQiH149GbtmhI"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "929751447309-99r6uqq2bkts1lailqqrjcd37ml89i3f.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
