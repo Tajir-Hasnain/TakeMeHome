@@ -62,6 +62,7 @@ public class StudentActivity extends AppCompatActivity {
     public Double cuet_longitude , cuet_latitude;
     public Double MAX_DISTANCE = 2.0;
     public Integer count = 0;
+    private String id;
 
     // boolean flag to toggle the ui
     private Boolean mRequestingLocationUpdates;
@@ -80,6 +81,10 @@ public class StudentActivity extends AppCompatActivity {
 
     private void init() {
 
+        Intent intent = getIntent();
+        id = intent.getStringExtra("id");
+        Log.d("ID",id);
+
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
         mSettingsClient = LocationServices.getSettingsClient(this);
 
@@ -97,7 +102,7 @@ public class StudentActivity extends AppCompatActivity {
                     Log.d("Location", "Longitude = " + longitude.toString() + ", Latitude = " + latitude.toString());
                     Log.d("Status","Not in the active region"+" "+count.toString());
                     mRequestingLocationUpdates = false;
-                    if(count == 60) {
+                    if(count == 24) {
                         stopLocationUpdates();
                         count = 0;
                     }
@@ -277,5 +282,14 @@ public class StudentActivity extends AppCompatActivity {
             return false;
 
         return true;
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent intent = new Intent(Intent.ACTION_MAIN);
+        intent.addCategory(Intent.CATEGORY_HOME);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
     }
 }
