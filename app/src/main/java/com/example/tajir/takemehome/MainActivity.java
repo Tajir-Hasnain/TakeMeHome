@@ -68,12 +68,12 @@ public class MainActivity extends AppCompatActivity {
         // the GoogleSignInAccount will be non-null.
         GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
         if(account != null)
-            RedirectToStudentActivity(account);
+            RedirectToOptionActivity(account);
     }
 
-    public void RedirectToStudentActivity(GoogleSignInAccount account) {
+    public void RedirectToOptionActivity(GoogleSignInAccount account) {
         String id = account.getId();
-        Intent intent = new Intent(this, StudentActivity.class);
+        Intent intent = new Intent(this, OptionActivity.class);
         intent.putExtra("id",id);
         startActivity(intent);
     }
@@ -108,7 +108,7 @@ public class MainActivity extends AppCompatActivity {
             GoogleSignInAccount account = completedTask.getResult(ApiException.class);
 
             // Signed in successfully, show authenticated UI.
-            RedirectToStudentActivity(account);
+            RedirectToOptionActivity(account);
         } catch (ApiException e) {
             // The ApiException status code indicates the detailed failure reason.
             // Please refer to the GoogleSignInStatusCodes class reference for more information.

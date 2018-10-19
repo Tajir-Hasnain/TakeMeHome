@@ -72,6 +72,8 @@ public class StudentActivity extends AppCompatActivity {
     public Double MAX_DISTANCE = 2.0;
     public Integer count = 0;
     private String id;
+    public Integer loopCount = 0;
+    private static final String TAG = "MainActivity";
 
     // boolean flag to toggle the ui
     private Boolean mRequestingLocationUpdates;
@@ -113,10 +115,18 @@ public class StudentActivity extends AppCompatActivity {
                     Log.d("Status","Not in the active region"+" "+count.toString());
                     mRequestingLocationUpdates = false;
                     if(count == 24) {
+                        requesting = false;
                         stopLocationUpdates();
                         count = 0;
                     }
                     count++;
+                }
+
+                if(requesting) {
+                    startBackgroundService();
+                }
+                else {
+                    stopBackgroundService();
                 }
 
                 Toast.makeText(StudentActivity.this, "{" + longitude.toString() + "," + latitude.toString() + "}", Toast.LENGTH_SHORT).show();
@@ -199,8 +209,14 @@ public class StudentActivity extends AppCompatActivity {
 
     public void cancelClick(View view) {
         Log.d("Status","Request Cancelled.");
+        requesting = false;
         mRequestingLocationUpdates = false;
         stopLocationUpdates();
+        stopBackgroundService();
+        Button button = findViewById(R.id.stdcancel);
+        button.setEnabled(false);
+        button = findViewById(R.id.stdrequest);
+        button.setEnabled(true);
     }
 
     public void requestClick(View view) {
@@ -213,6 +229,10 @@ public class StudentActivity extends AppCompatActivity {
                     @Override
                     public void onPermissionGranted(PermissionGrantedResponse response) {
                         mRequestingLocationUpdates = true;
+                        Button button = findViewById(R.id.stdcancel);
+                        button.setEnabled(true);
+                        button = findViewById(R.id.stdrequest);
+                        button.setEnabled(false);
                         requestLocationUpdates();
                     }
                     @Override
@@ -226,10 +246,34 @@ public class StudentActivity extends AppCompatActivity {
                     @Override
                     public void onPermissionRationaleShouldBeShown(PermissionRequest permission, PermissionToken token) {
                         token.continuePermissionRequest();
+                        Button button = findViewById(R.id.stdcancel);
+                        button.setEnabled(true);
+                        button = findViewById(R.id.stdrequest);
+                        button.setEnabled(false);
                         requestLocationUpdates();
                     }
                 }).check();
     }
+
+    public void startBackgroundService() {
+        Log.d(TAG,"Starting Background Service");
+        Intent intent = new Intent(getApplicationContext() , Background.class);
+        intent.putExtra("status","start");
+        intent.putExtra("id" , id);
+        intent.putExtra("loopCount",loopCount.toString());
+        loopCount++;
+        startService(intent);
+    }
+
+    public void stopBackgroundService() {
+        Intent intent = new Intent(getApplicationContext() , Background.class);
+        intent.putExtra("status","stop");
+        intent.putExtra("id",id);
+        loopCount = 0;
+        intent.putExtra("loopCount", loopCount.toString());
+        startService(intent);
+    }
+
 
     private void openSettings() {
         Intent intent = new Intent();
@@ -273,7 +317,7 @@ public class StudentActivity extends AppCompatActivity {
         RequestQueue queue = Volley.newRequestQueue(this);
         final TextView tv = findViewById(R.id.countTempoo);
 
-        String url = "http://6105b92d.ngrok.io/studentnumrequest";
+        String url = "http://6105b92d.ngrok.io/drivernumrequest";
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
                 Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
             @Override
@@ -314,14 +358,5 @@ public class StudentActivity extends AppCompatActivity {
             }
         });
         queue.add(jsonObjectRequest);
-    }
-
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        Intent intent = new Intent(Intent.ACTION_MAIN);
-        intent.addCategory(Intent.CATEGORY_HOME);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(intent);
     }
 }
