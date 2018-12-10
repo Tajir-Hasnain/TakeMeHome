@@ -11,7 +11,12 @@ The idea of the application is based on this problem stated above.The passengers
 1. The request of the passenger / online status of the driver will be automatically turned off if the user is not in the 2 km radius of the university campus.
 2. The user can cancel a request if he no longer needs a ride.
 
+### Languages used :
+#### Front-end : Java (Android)
+#### Server-side : GoLang
+
 The front-end works are done by : [Tajir Hasnain](https://github.com/Tajir-Hasnain/)
+
 The server-side works are done by : [Gazi Yamin Iqbal](https://github.com/lnzva)
 
 Linked Repository : [Take Me Home (Driver)](https://github.com/Tajir-Hasnain/TakeMeHomeDriver)
