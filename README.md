@@ -15,7 +15,7 @@ The idea of the application is based on this problem stated above.The passengers
 #### Front-end : Java (Android)
 #### Server-side : GoLang
 
-The front-end works are done by : [Tajir Hasnain](https://github.com/Tajir-Hasnain/)
+The front-end works are done by : [Tajir Hasnain](https://github.com/tajirhas9/)
 
 The server-side works are done by : [Gazi Yamin Iqbal](https://github.com/lnzva)
 
